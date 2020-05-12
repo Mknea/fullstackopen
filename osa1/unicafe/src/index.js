@@ -15,8 +15,8 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
-const Votes = ({ votes, text}) => (
-  <div>{text} {votes}</div>
+const StatisticLine = ({ text, number, unit=''}) => (
+  <div>{text} {number}{unit}</div>
 )
 
 const Statistics = ({good, neutral, bad}) => {
@@ -28,15 +28,13 @@ const Statistics = ({good, neutral, bad}) => {
     positive = good/sum
     return(
       <>
-      <div>
-        Total votes {sum}
-      </div>
-      <div>
-        Average {ave}
-      </div>
-      <div>
-        Positive {positive} %
-      </div>
+      <StatisticLine number={good} text='good votes' />
+      <StatisticLine number={neutral} text='neutral votes' />
+      <StatisticLine number={bad} text='bad votes' />
+      <br/>
+      <StatisticLine text='Total votes' number={sum}/>
+      <StatisticLine text='Average' number={ave}/>
+      <StatisticLine text='Positive' number={positive} unit={'%'}/>
       </>
     )
   }
@@ -72,13 +70,7 @@ const App = () => {
         <Button onClick={handleBadClick} text='Bad' />
       </div>
       <Header name='Statistics'/>
-      <div>
-        <Votes votes={good} text='good votes' />
-        <Votes votes={neutral} text='neutral votes' />
-        <Votes votes={bad} text='bad votes' />
-      </div>
-      <br/>
-        <Statistics good={good} neutral={neutral} bad={bad} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
