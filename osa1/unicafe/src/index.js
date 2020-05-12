@@ -15,9 +15,32 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
-const Content = ({ votes, text}) => (
+const Votes = ({ votes, text}) => (
   <div>{text} {votes}</div>
 )
+
+const Statistics = ({good, neutral, bad}) => {
+  const sum = good + neutral + bad
+  let ave = 0
+  let positive = 0
+  if (sum !== 0) {
+    ave = (good - bad)/sum
+    positive = good/sum
+  }
+  return(
+    <>
+    <div>
+      Total votes {sum}
+    </div>
+    <div>
+      Average {ave}
+    </div>
+    <div>
+      Positive {positive} %
+    </div>
+    </>
+  )
+}
 
 const App = () => {
   // tallenna napit omaan tilaansa
@@ -47,10 +70,12 @@ const App = () => {
       </div>
       <Header name='Statistics'/>
       <div>
-        <Content votes={good} text='good votes' />
-        <Content votes={neutral} text='neutral votes' />
-        <Content votes={bad} text='bad votes' />
+        <Votes votes={good} text='good votes' />
+        <Votes votes={neutral} text='neutral votes' />
+        <Votes votes={bad} text='bad votes' />
       </div>
+      <br/>
+        <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
