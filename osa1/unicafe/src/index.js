@@ -21,25 +21,28 @@ const Votes = ({ votes, text}) => (
 
 const Statistics = ({good, neutral, bad}) => {
   const sum = good + neutral + bad
-  let ave = 0
-  let positive = 0
   if (sum !== 0) {
+    let ave = 0
+    let positive = 0
     ave = (good - bad)/sum
     positive = good/sum
+    return(
+      <>
+      <div>
+        Total votes {sum}
+      </div>
+      <div>
+        Average {ave}
+      </div>
+      <div>
+        Positive {positive} %
+      </div>
+      </>
+    )
   }
-  return(
-    <>
-    <div>
-      Total votes {sum}
-    </div>
-    <div>
-      Average {ave}
-    </div>
-    <div>
-      Positive {positive} %
-    </div>
-    </>
-  )
+  else {
+    return(<div>No feedback given yet!</div>)
+  }
 }
 
 const App = () => {
