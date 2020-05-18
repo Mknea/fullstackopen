@@ -1,7 +1,7 @@
 import React from 'react'
-const FilterForm = ( {name, handler} ) => (
+const FilterForm = ( {textAbove, name, handler} ) => (
     <form>
-        <div>filter shown with</div>
+        <div>{textAbove}</div>
         <div>
             <input value={name} onChange={handler}/>
         </div>

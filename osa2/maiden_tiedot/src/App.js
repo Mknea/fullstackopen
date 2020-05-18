@@ -1,75 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import FilterForm from './components/filterForm'
-
-const Content = ({countries, weatherDetails, buttonHandler}) => {
-  return(
-    <div>
-    {countries.length === 1
-      ? (
-        <>
-        <CountryDetails country={countries[0]} />
-        {Object.keys(weatherDetails).length !== 0 &&
-          <WeatherDetails capital={countries[0].capital} data={weatherDetails} />
-        }
-        </>
-      )
-      : (countries.length > 10
-        ? <div>Too many matches, specify another filter</div>
-        : <ListOptions countries={countries} buttonHandler={buttonHandler}/>
-        )
-    }
-    </div>
-  )
-}
-
-const CountryDetails = ({country}) => {
-  return(
-    <>
-    <h1>{country.name}</h1>
-    <div>Code: {country.alpha3Code}</div>
-    <div>Capital: {country.capital}</div>
-    <div>Population: {country.population}</div>
-    <div>Area: {country.area}</div>
-    <h3>Languages</h3>
-    <ul>
-      {country.languages.map(language =>
-        <li key={language.iso639_1}>{language.name}</li>)}
-    </ul>
-    <img src={country.flag} alt={`${country.name} flag`}/>
-    </>
-  )
-}
-
-const WeatherDetails = ({capital, data}) => {
-  return(
-    <>
-    <h2>Weather in {capital}</h2>
-    <div>Temperature {data.temp.toFixed(2)} celcius</div>
-    <div>Humidity {data.humidity}%</div>
-    <img src={data.weatherImgUrl} alt={data.weatherName}/>
-    <a href={data.moreInfoUrl}>More information</a>
-    </>
-  )
-}
-
-const ListOptions = ({countries, buttonHandler}) => {
-  return(
-    <>
-    {countries.map((country, i) => {
-      return(
-      <div key={country.alpha3Code}>{country.name}
-      <button
-        onClick={() => buttonHandler(country)} // pass obj to handler
-        key={country.alpha3Code.concat(i)}>
-          Show
-      </button>
-      </div>
-      )}
-    )}
-    </>
-  )
-}
+import Content from './components/content'
 
 const App = () => {
   const [ countries, setCountries] = useState([])
@@ -101,7 +33,7 @@ const App = () => {
   }, []) // Get all countries at start
 
   useEffect( () => {
-    setWeatherDetails({})
+    setWeatherDetails({}) // Empty previous results
     if (currentCountries.length === 1) {
       const proxyurl = "https://cors-anywhere.herokuapp.com/" // CORS proxy
       const metaWeatherUrl = "https://www.metaweather.com"
@@ -139,10 +71,15 @@ const App = () => {
       .catch(error => console.log('Error while getting weather data:', error))
     }
   }, [currentCountries]) // Get weather data on capital for single country searches
+  
   return (
     <div>
       <h2>Country search</h2>
-      <FilterForm name={filterName} handler={handleFilterChange} />
+      <FilterForm
+        textAbove={'Find countries'}
+        name={filterName}
+        handler={handleFilterChange}
+      />
       <>
       <Content 
         countries={currentCountries}
