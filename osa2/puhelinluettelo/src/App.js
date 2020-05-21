@@ -11,15 +11,12 @@ const App = () => {
   const [ filterName, setFilterName] = useState('')
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     setFilterName(event.target.value)
   }
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
@@ -51,13 +48,26 @@ const App = () => {
         .catch(error => window.alert(`Error adding a new entry: ${error}`))
     }
   }
+  const removePerson = (personToBeDeleted) => {
+    if (window.confirm(`Delete ${personToBeDeleted.name}`)) {
+      personService
+      .remove(personToBeDeleted)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== personToBeDeleted.id))
+      })
+      .catch(error => window.alert(`Error removing existing entry: ${error}`))
+    }
+  }
   const personsToShow = persons.filter(person =>
     person.name.toLowerCase().includes(filterName.toLowerCase())
   )
   return (
     <div>
       <h2>Phonebook</h2>
-      <FilterForm name={filterName} handler={handleFilterChange} />
+      <FilterForm 
+        name={filterName}
+        handler={handleFilterChange}
+      />
 
       <h3>Add a new entry</h3>
       <PersonForm
@@ -69,7 +79,10 @@ const App = () => {
       />
       
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow}/>
+      <Persons
+        personsToShow={personsToShow}
+        removeHandler={removePerson}
+      />
     </div>
   )
 }

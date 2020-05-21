@@ -1,7 +1,15 @@
 import React from 'react'
-const Person = ( {name, number} ) => (
+const Person = ( {person, removeHandler} ) => {
+  return (
+    <>
     <div>
-      {name} {number}
+      {person.name} {person.number}
+      <button
+      onClick={() => removeHandler(person)} >
+        Delete
+    </button>
     </div>
-)
+    </>
+  )
+}
 export default Person;
