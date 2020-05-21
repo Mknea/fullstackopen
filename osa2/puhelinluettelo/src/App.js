@@ -30,8 +30,22 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.some(person => person.name === newName)) {
-      window.alert(`${newName} is already added to phonebook`)
+    const foundPerson = persons.find(person => person.name === newName)
+    if (foundPerson !== undefined) {
+      const doReplace = window.confirm(
+        `${newName} is already added to phonebook, ` +
+        `replace the old number with a new one?`)
+      if (doReplace) {
+        const changedPerson = {...foundPerson, number: newNumber}
+        personService
+          .update(changedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => 
+              person.id === returnedPerson.id ? returnedPerson : person)
+            )
+          })
+          .catch(error => window.alert(`Error updating the existing entry: ${error}`))
+      }
     }
     else {
       const newPerson = {
@@ -49,13 +63,13 @@ const App = () => {
     }
   }
   const removePerson = (personToBeDeleted) => {
-    if (window.confirm(`Delete ${personToBeDeleted.name}`)) {
+    if (window.confirm(`Delete ${personToBeDeleted.name}?`)) {
       personService
       .remove(personToBeDeleted)
       .then(() => {
         setPersons(persons.filter(person => person.id !== personToBeDeleted.id))
       })
-      .catch(error => window.alert(`Error removing existing entry: ${error}`))
+      .catch(error => window.alert(`Error removing the existing entry: ${error}`))
     }
   }
   const personsToShow = persons.filter(person =>
