@@ -1,7 +1,34 @@
+GET http://localhost:3001/info
+###
 GET http://localhost:3001/api/persons
 ###
 GET http://localhost:3001/api/persons/1
 ###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Testi McTestinen", 
+    "number": "3230597235097823"
+}
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "malformed_key_for_name": "Testi McTestinen", 
+    "number": "32305972350973"
+}
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "", 
+    "number": "3230597235"
+}
+###
 DELETE http://localhost:3001/api/persons/4
 ###
 DELETE http://localhost:3001/api/persons/25
+###

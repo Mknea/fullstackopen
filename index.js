@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+app.use(express.json())
 
 let phonebook = [
     { 
@@ -49,6 +50,29 @@ app.get('/info', (req, res) => {
         `<div>Phonebook has info for ${phonebook.length} people</div>` +
         `<div>${timestamp}</div>`
     );
+})
+
+app.post('/api/persons', (req, res) => {
+    const newPerson = req.body;
+    console.log(`Received POST for person: ${JSON.stringify(newPerson)}`);
+    const hasValidFields =  newPerson.hasOwnProperty('name') &&
+                            newPerson.hasOwnProperty('number');
+    const isNew = (!phonebook.some(person => person.name === newPerson.name));
+    if (hasValidFields && isNew) {
+        if (newPerson.name === "" || newPerson.number === "") {
+            return res.status(400).json({error: 'Content missing'});
+        }
+        const newID = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER - 4) + 4); // 4 first entries are hardcoded
+        const addedPerson = {...newPerson, "id": newID};
+        phonebook.push(addedPerson);
+        res.json(addedPerson);
+    }
+    else if (hasValidFields) 
+        res.status(409).json({error: 'Entry already exists'});
+    else                
+    {
+        res.status(400).json({error: 'Malformed request'});
+    }
 })
 
 app.delete('/api/persons/:id', (req, res) => {
