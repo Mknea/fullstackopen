@@ -25,11 +25,20 @@ const phonebook = [
 ]
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>')
+    res.send('<h1>Welcome to phonebook</h1>')
 })
   
 app.get('/api/persons', (req, res) => {
     res.json(phonebook)
+})
+
+app.get('/info', (req, res) => {
+    const timestamp = new Date();
+    return(
+        res.send(
+            `<div>Phonebook has info for ${phonebook.length} people</div>` +
+            `<div>${timestamp}</div>`)
+    )
 })
 
 const PORT = 3001
