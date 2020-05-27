@@ -32,6 +32,17 @@ app.get('/api/persons', (req, res) => {
     res.json(phonebook)
 })
 
+app.get('/api/persons/:id', (req, res) => {
+    const id = Number(req.params.id)
+    const person = phonebook.find(person => person.id === id)
+    if (person) {
+        res.json(person)
+    }
+    else {
+        res.status(404).end()
+    }
+})
+
 app.get('/info', (req, res) => {
     const timestamp = new Date();
     return(
