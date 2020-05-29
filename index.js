@@ -3,7 +3,15 @@ const app = express()
 var morgan = require('morgan')
 
 app.use(express.json())
-app.use(morgan('tiny'))
+
+morgan.token('postData', (req, res) => {
+    if (req.method === 'POST') {
+        return JSON.stringify(req.body);
+    }
+    return "";
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postData'));
 
 let phonebook = [
     { 
@@ -57,7 +65,7 @@ app.get('/info', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const newPerson = req.body;
-    console.log(`Received POST for person: ${JSON.stringify(newPerson)}`);
+    //console.log(`Received POST for person: ${JSON.stringify(newPerson)}`);
     const hasValidFields =  newPerson.hasOwnProperty('name') &&
                             newPerson.hasOwnProperty('number');
     const isNew = (!phonebook.some(person => person.name === newPerson.name));
@@ -81,9 +89,9 @@ app.post('/api/persons', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id);
     const personIndex = phonebook.findIndex(person => person.id === id);
-    console.log(`Request to delete index ${personIndex}`);
+    //console.log(`Request to delete index ${personIndex}`);
     if (personIndex !== -1) {
-        console.log('Found! Deleting');
+        //console.log('Found! Deleting');
         phonebook.splice(personIndex, 1);
         res.status(200).end();
     }
