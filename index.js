@@ -78,34 +78,21 @@ app.get('/info', (req, res) => {
     });
 })
 
-app.post('/api/persons', (req, res) => {
-	const newPerson = req.body;
-	const hasValidFields = newPerson.hasOwnProperty('name') &&
-		newPerson.hasOwnProperty('number');
-	//const isNew = (!phonebook.some(person => person.name === newPerson.name));
-	if (hasValidFields) { //&& isNew) {
-		if (newPerson.name === "" || newPerson.number === "") {
-			return res.status(400).json({ error: 'Content missing' });
-		}
-		//const newID = Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER - 4) + 4); // 4 first entries are hardcoded
-		//const addedPerson = { ...newPerson, "id": newID };
-		const person = new Person({
-			name: newPerson.name,
-			number: newPerson.number
+app.post('/api/persons', (req, res, next) => {
+	const person = new Person({
+		name: req.body.name,
+		number: req.body.number
+	})
+	person
+		.save()
+		.then(savedPerson => {
+			console.log(
+				`Saved ${savedPerson.name} number ${savedPerson.number} to db with id ${savedPerson._id}`)
+			res.json(savedPerson);
 		})
-		person
-			.save()
-			.then(savedPerson => {
-				console.log(
-					`Saved ${savedPerson.name} number ${savedPerson.number} to db with id ${savedPerson._id}`)
-				res.json(savedPerson);
-			})		
-	}
-	//else if (hasValidFields)
-	//	res.status(409).json({ error: 'Entry already exists' });
-	else {
-		res.status(400).json({ error: 'Malformed request' });
-	}
+		.catch(error => {
+			next(error)
+		})
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
@@ -130,6 +117,9 @@ const errorHandler = (error, req, res, next) => {
   if (error.name === 'CastError') {
     return res.status(400).send({ error: 'malformatted id' })
   }
+	else if (error.name === 'ValidationError') {
+		return res.status(400).json({ error: error.message })
+	}
   next(error)
 }
 
