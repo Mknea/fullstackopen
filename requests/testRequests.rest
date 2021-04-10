@@ -8,7 +8,7 @@ POST http://localhost:3001/api/persons
 content-type: application/json
 
 {
-    "name": "Testi McTestinen", 
+    "name": "Testi McTestinen1", 
     "number": "3230597235097823"
 }
 ###
@@ -31,4 +31,21 @@ content-type: application/json
 DELETE http://localhost:3001/api/persons/4
 ###
 DELETE http://localhost:3001/api/persons/25
+###
+
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "te",
+    "number": "32305972350973"
+}
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Test too short number",
+    "number": "323"
+}
 ###
