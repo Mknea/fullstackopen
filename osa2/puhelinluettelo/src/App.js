@@ -77,7 +77,9 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
-        .catch(error => displayNotification(`Error encountered while adding a new person`, true))
+        .catch(error => {
+          displayNotification(`Failed to add new person: ${error.response.data}`, true)
+        })
     }
   }
   const removePerson = (personToBeDeleted) => {
