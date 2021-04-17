@@ -1,0 +1,24 @@
+
+@port = 3001
+###
+GET http://localhost:{{port}}/api/blogs
+###
+POST http://localhost:{{port}}/api/blogs
+content-type: application/json
+
+{
+    "title": "Blog on testing", 
+    "author": "Me me",
+    "url": "www.me.com",
+    "likes": 5
+}
+###
+POST http://localhost:{{port}}/api/blogs
+content-type: application/json
+
+{
+    "title": "Second test blog", 
+    "author": "You yu",
+    "url": "www.bloggerhost.com",
+    "likes": 400
+}
