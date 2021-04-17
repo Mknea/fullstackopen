@@ -1,5 +1,5 @@
 
-@port = 3001
+@port = 3006
 ###
 GET http://localhost:{{port}}/api/blogs
 ###
@@ -21,4 +21,14 @@ content-type: application/json
     "author": "You yu",
     "url": "www.bloggerhost.com",
     "likes": 400
+}
+###
+POST http://localhost:{{port}}/api/blogs
+content-type: application/json
+
+{
+    "title": "Test invalid fields", 
+    "author": 500,
+    "url": 200,
+    "likes": "invalid value"
 }
