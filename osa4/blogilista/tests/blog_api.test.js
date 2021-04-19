@@ -75,4 +75,31 @@ describe('Add new blog', () => {
     }
     expect(blogsAtEnd).toContainEqual(expect.objectContaining(expectedResult))
   })
+
+  test('fails if title or url are omitted', async () => {
+    const newBlog1 = {
+      'author': 'Harry McNoTitle',
+      'url': 'www.sluggerhost.com',
+      'likes': 2
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog1)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const newBlog2 = {
+      'author': 'Sally McNoURL',
+      'title': 'How to create blog without url',
+      'likes': 2
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog2)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
 })
