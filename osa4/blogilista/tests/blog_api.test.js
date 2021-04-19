@@ -39,4 +39,10 @@ describe('Get blogs', () => {
       .expect('Content-Type', /application\/json/)
     expect(response.body).toHaveLength(initialBlogs.length)
   })
+  test('returns blog identifier field as \'id\', not \'_id\'', async () => {
+    const response = await api
+      .get('/api/blogs')
+      .expect(200)
+    expect(response.body[0]).toHaveProperty('id')
+  })
 })
