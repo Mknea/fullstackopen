@@ -103,3 +103,20 @@ describe('Add new blog', () => {
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
   })
 })
+
+describe('Delete blog', () => {
+
+  test('removes it from DB', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blog = blogsAtStart[0]
+    await api
+      .delete(`/api/blogs/${blog['id']}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+
+    expect(blogsAtEnd).not.toContainEqual(expect.objectContaining(blog))
+  })
+
+})
