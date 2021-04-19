@@ -18,6 +18,7 @@ afterAll(() => {
 })
 
 describe('Get blogs', () => {
+
   test('returns them all in json', async () => {
     const response = await api
       .get('/api/blogs')
@@ -25,6 +26,7 @@ describe('Get blogs', () => {
       .expect('Content-Type', /application\/json/)
     expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
+
   test('returns blog identifier field as \'id\', not \'_id\'', async () => {
     const response = await api
       .get('/api/blogs')
@@ -34,6 +36,7 @@ describe('Get blogs', () => {
 })
 
 describe('Add new blog', () => {
+
   test('adds that blog to DB', async () => {
     const newBlog = {
       'title': 'Crazy simple way to add new test blog!',
@@ -51,5 +54,25 @@ describe('Add new blog', () => {
 
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
     expect(blogsAtEnd).toContainEqual(expect.objectContaining(newBlog))
+  })
+
+  test('adds the blog with 0 likes if they are omitted', async () => {
+    const newBlog = {
+      'title': 'How to create unliked blog',
+      'author': 'He he',
+      'url': 'www.muggerhost.com',
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const expectedResult = {
+      ...newBlog,
+      'likes': 0
+    }
+    expect(blogsAtEnd).toContainEqual(expect.objectContaining(expectedResult))
   })
 })
