@@ -9,7 +9,11 @@ usersRouter.get('/', async (request, response) => {
 
 usersRouter.post('/', async (request, response) => {
   const body = request.body
-
+  if (body.password.length < 3) {
+    response.status(400).send(
+      { error: 'Password is shorter than the minimum allowed length (3)' }
+    )
+  }
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
