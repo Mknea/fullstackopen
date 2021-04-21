@@ -120,3 +120,40 @@ describe('Delete blog', () => {
   })
 
 })
+
+describe('Mofidy blog', () => {
+
+  test('overwrites only \'likes\' and ignores other fields', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    let modifiedBlog = { ...blogsAtStart[0] }
+    modifiedBlog.likes = 50
+    modifiedBlog.title = 'How to update a blog title'
+    await api
+      .put(`/api/blogs/${modifiedBlog['id']}`)
+      .send(modifiedBlog)
+      .expect(200)
+
+    let expectedBlog = {
+      ...blogsAtStart[0],
+      likes: 50
+    }
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toContainEqual(expect.objectContaining(expectedBlog))
+  })
+
+  test.only('does nothing without new \'likes\'-value', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    let modifiedBlog = { ...blogsAtStart[0] }
+    modifiedBlog.title = 'How to update a blog title'
+    await api
+      .put(`/api/blogs/${modifiedBlog['id']}`)
+      .send(modifiedBlog)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toContainEqual(expect.objectContaining(blogsAtStart[0]))
+  })
+
+})
