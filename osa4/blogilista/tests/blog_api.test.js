@@ -142,7 +142,7 @@ describe('Mofidy blog', () => {
     expect(blogsAtEnd).toContainEqual(expect.objectContaining(expectedBlog))
   })
 
-  test.only('does nothing without new \'likes\'-value', async () => {
+  test('does nothing without new \'likes\'-value', async () => {
     const blogsAtStart = await helper.blogsInDb()
     let modifiedBlog = { ...blogsAtStart[0] }
     modifiedBlog.title = 'How to update a blog title'

@@ -32,3 +32,14 @@ content-type: application/json
     "url": 200,
     "likes": "invalid value"
 }
+###
+GET http://localhost:{{port}}/api/users
+###
+POST http://localhost:{{port}}/api/users
+content-type: application/json
+
+{
+    "username": "Testy", 
+    "name": "Testy McTesty",
+    "password": "super secret!"
+}
