@@ -2,6 +2,8 @@
 @port = 3006
 ### Token for Testy McTesty
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRlc3QiLCJpZCI6IjYwODFjYWI3ODU0NDczMWZmMDkxM2RjNiIsImlhdCI6MTYxOTEyMTQzOH0.EBZoMBJj2wJLAhky4rKiqXwbHqr6LWxIrSo6z_9EHtM
+### Change blog id according to created
+@blog_id = 6081d7e31a373325bfb79b1c
 ###
 POST http://localhost:{{port}}/api/login
 content-type: application/json
@@ -24,6 +26,13 @@ Authorization: bearer {{token}}
     "url": "www.me.com",
     "likes": 5
 }
+### Valid and invalid (somebody else's blog) delete
+DELETE http://localhost:{{port}}/api/blogs/{{blog_id}}
+content-type: application/json
+Authorization: bearer {{token}}
+
+### Delete without token
+DELETE http://localhost:{{port}}/api/blogs/{{blog_id}}
 ###
 POST http://localhost:{{port}}/api/blogs
 content-type: application/json
